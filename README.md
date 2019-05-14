@@ -1,0 +1,2 @@
+# Hitori
+Awesome puzzle game

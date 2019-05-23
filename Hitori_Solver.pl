@@ -36,19 +36,19 @@ black(4,2).
 is_white(X,Y):- cell(X,Y,_) , not(black(X,Y)).
 
 % Finds First White nextNumber(N) in Row
-row_next(_,5,_):- false,!.
+%row_next(_,5,_):- false,!.
 row_next(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NY is Y+1 ,row_next(X,NY,N) ).
 
 % Finds First White prevNumber(N) in Row
-row_prev(_,0,_):- false,!. 
+%row_prev(_,0,_):- false,!. 
 row_prev(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NY is Y-1 ,row_prev(X,NY,N) ).
 
 % Finds First White nextNumber(N) in Column
-column_next(5,_,_):- false,!.
+%column_next(5,_,_):- false,!.
 column_next(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NX is X+1 ,column_next(NX,Y,N) ).
 
 % Finds First White prevNumber(N) in Column
-column_prev(0,_,_):- false,!. 
+%column_prev(0,_,_):- false,!. 
 column_prev(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NX is X-1 ,column_prev(NX,Y,N) ).
 
 

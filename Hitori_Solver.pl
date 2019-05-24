@@ -23,10 +23,12 @@ cell(4,3,1).
 cell(4,4,2).
 
 % Black Cells
-black(1,1).
-black(1,3).
-black(3,3).
-black(4,2).
+% black(1,1).
+% black(1,3).
+% black(3,3).
+% black(4,2).
+:-dynamic(black/2).
+:-dynamic(circle/2).
 
 
 % ------------------------------------
@@ -151,4 +153,79 @@ solved():- grid_unique(),
 
 
 % ------------------------------------
+% --------------PART 2----------------
+% ------------------------------------
 
+% ---------- Starting techniques -----
+
+% #1 Searching for adjacent triplets:
+
+% Mark Cell as shaded(Black) or not shaded(Circle)
+shade(X,Y):- black(X,Y),! ; assert(black(X,Y)),!.
+unshade(X,Y):- circle(X,Y),! ; assert(circle(X,Y)),!.
+
+% Check for adjacent triplets rows starting from[X1,Y1]:
+adjacent_row_at(X1,Y1):-
+	Y2 is Y1+1 , Y3 is Y1+2,
+	cell(X1,Y1,N1) , cell(X1,Y2,N2) , cell(X1,Y3,N3),
+	( N1 =:= N2 , N2 =:= N3 ->
+		shade(X1,Y1),
+		unshade(X1,Y2),
+		shade(X1,Y3), write(X1),write(Y1),write("->triple Founded[Row]"),nl,
+		Y4 is Y1+3,
+		adjacent_row_at(X1,Y4)
+		;
+		adjacent_row_at(X1,Y2)
+	).
+
+% Loop through all Rows:
+search_adjacent_triplets_rows([X,Y]):-
+	cell(X,Y,_) , \+ adjacent_row_at(X,Y),
+
+	NX is X+1,
+	search_adjacent_triplets_rows([NX,Y]);
+	false,!.
+
+
+% Check for adjacent triplets columns starting from[X1,Y1]:
+adjacent_column_at(X1,Y1):-
+	X2 is X1+1 , X3 is X1+2,
+	cell(X1,Y1,N1) , cell(X2,Y1,N2) , cell(X3,Y1,N3),
+	( N1 =:= N2 , N2 =:= N3 ->
+		shade(X1,Y1),
+		unshade(X2,Y1),
+		shade(X3,Y1), write(X1),write(Y1),write("->triple Founded[Column]"),nl,
+		X4 is X1+3,
+		adjacent_column_at(X4,Y1)
+		;
+		adjacent_row_at(X2,Y1)
+	).
+
+% Loop through all Columns:
+search_adjacent_triplets_columns([X,Y]):-
+	cell(X,Y,_) , \+ adjacent_column_at(X,Y),
+
+	NY is Y+1,
+	search_adjacent_triplets_columns([X,NY]);
+	false,!.
+
+
+% ---------- Basic techniques --------
+% ---------- Corner techniques -------
+
+
+
+
+solve():-
+	\+ search_adjacent_triplets_rows([1,1]),
+	\+ search_adjacent_triplets_columns([1,1]).
+
+
+main():-
+	init(),
+	solve().
+	%solved().
+	
+init():-
+	retractall(black(_,_)),
+	retractall(circle(_,_)).

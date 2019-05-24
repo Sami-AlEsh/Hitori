@@ -159,7 +159,6 @@ solved():- grid_unique(),
 % ---------- Starting techniques -----
 
 % #1 Searching for adjacent triplets:
-
 % Mark Cell as shaded(Black) or not shaded(Circle)
 shade(X,Y):- black(X,Y),! ; assert(black(X,Y)),!.
 unshade(X,Y):- circle(X,Y),! ; assert(circle(X,Y)),!.
@@ -210,6 +209,52 @@ search_adjacent_triplets_columns([X,Y]):-
 	false,!.
 
 
+% #2 Square between a pair:
+% Check for pairs in row starting from[X1,Y1]:
+pair_row_at(X1,Y1):-
+	Y2 is Y1+1 , Y3 is Y1+2,
+	cell(X1,Y1,N1) , cell(X1,Y2,N2) , cell(X1,Y3,N3),
+	( N1 =:= N3 ->
+		unshade(X1,Y2),
+		write(X1),write(Y1),write("->pair Founded[Row]"),nl,
+		Y4 is Y1+3,
+		pair_row_at(X1,Y4)
+		;
+		pair_row_at(X1,Y2)
+	).
+
+% Loop through all Rows:
+search_pairs_rows([X,Y]):-
+	cell(X,Y,_) , \+ pair_row_at(X,Y),
+
+	NX is X+1,
+	search_pairs_rows([NX,Y]);
+	false,!.
+
+
+% Check for pairs in column starting from[X1,Y1]:
+pair_column_at(X1,Y1):-
+	X2 is X1+1 , X3 is X1+2,
+	cell(X1,Y1,N1) , cell(X2,Y1,N2) , cell(X3,Y1,N3),
+	( N1 =:= N3 ->
+		unshade(X2,Y1),
+		write(X1),write(Y1),write("->pair Founded[Column]"),nl,
+		X4 is X1+3,
+		pair_column_at(X4,Y1)
+		;
+		pair_column_at(X2,Y1)
+	).
+
+% Loop through all Columns:
+search_pairs_columns([X,Y]):-
+	cell(X,Y,_) , \+ pair_column_at(X,Y),
+
+	NY is Y+1,
+	search_pairs_columns([X,NY]);
+	false,!.
+
+
+
 % ---------- Basic techniques --------
 % ---------- Corner techniques -------
 
@@ -218,7 +263,9 @@ search_adjacent_triplets_columns([X,Y]):-
 
 solve():-
 	\+ search_adjacent_triplets_rows([1,1]),
-	\+ search_adjacent_triplets_columns([1,1]).
+	\+ search_adjacent_triplets_columns([1,1]),
+	\+ search_pairs_rows([1,1]),
+	\+ search_pairs_columns([1,1]).
 
 
 main():-

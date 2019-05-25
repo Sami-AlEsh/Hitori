@@ -23,11 +23,8 @@ cell(4,3,1).
 cell(4,4,2).
 
 % Black Cells
-% black(1,1).
-% black(1,3).
-% black(3,3).
-% black(4,2).
 :-dynamic(black/2).
+% UnShaded Cells
 :-dynamic(circle/2).
 
 
@@ -38,21 +35,16 @@ cell(4,4,2).
 is_white(X,Y):- cell(X,Y,_) , not(black(X,Y)).
 
 % Finds First White nextNumber(N) in Row
-%row_next(_,5,_):- false,!.
 row_next(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NY is Y+1 ,row_next(X,NY,N) ).
 
 % Finds First White prevNumber(N) in Row
-%row_prev(_,0,_):- false,!. 
 row_prev(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NY is Y-1 ,row_prev(X,NY,N) ).
 
 % Finds First White nextNumber(N) in Column
-%column_next(5,_,_):- false,!.
 column_next(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NX is X+1 ,column_next(NX,Y,N) ).
 
 % Finds First White prevNumber(N) in Column
-%column_prev(0,_,_):- false,!. 
 column_prev(X,Y,N):- cell(X,Y,Y1), ( (is_white(X,Y) , Y1 =:= N)-> true,! ; NX is X-1 ,column_prev(NX,Y,N) ).
-
 
 
 % Check if element(X,Y) is unique:
@@ -213,7 +205,7 @@ search_adjacent_triplets_columns([X,Y]):-
 % Check for pairs in row starting from[X1,Y1]:
 pair_row_at(X1,Y1):-
 	Y2 is Y1+1 , Y3 is Y1+2,
-	cell(X1,Y1,N1) , cell(X1,Y2,N2) , cell(X1,Y3,N3),
+	cell(X1,Y1,N1) , cell(X1,Y2,_) , cell(X1,Y3,N3),
 	( N1 =:= N3 ->
 		unshade(X1,Y2),
 		%write(X1),write(Y1),write("->pair Founded[Row]"),nl,
@@ -235,7 +227,7 @@ search_pairs_rows([X,Y]):-
 % Check for pairs in column starting from[X1,Y1]:
 pair_column_at(X1,Y1):-
 	X2 is X1+1 , X3 is X1+2,
-	cell(X1,Y1,N1) , cell(X2,Y1,N2) , cell(X3,Y1,N3),
+	cell(X1,Y1,N1) , cell(X2,Y1,_) , cell(X3,Y1,N3),
 	( N1 =:= N3 ->
 		unshade(X2,Y1),
 		%write(X1),write(Y1),write("->pair Founded[Column]"),nl,
@@ -302,13 +294,13 @@ corner_up_left():-
 	;true,!.
 
 corner_up_right():-
-	size(Rows,Columns) , Y1 is Columns-1,
+	size(_,Columns) , Y1 is Columns-1,
 	cell(1,Columns,M1),cell(1,Y1,M2),cell(2,Columns,M3),
 	M1=:=M2 , M2=:=M3 , shade(1,Columns)
 	;true,!.
 
 corner_down_left():-
-	size(Rows,Columns) , X1 is Rows-1,
+	size(Rows,_) , X1 is Rows-1,
 	cell(Rows,1,L1),cell(X1,1,L2),cell(Rows,2,L3),
 	L1=:=L2 , L2=:=L3 , shade(Rows,1)
 	;true,!.
@@ -336,7 +328,7 @@ solve():-
 
 main():-
 	init(),
-	solve().
+	solve(),
 	solved().
 	
 init():-

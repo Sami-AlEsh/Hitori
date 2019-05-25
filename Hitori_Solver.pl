@@ -288,8 +288,39 @@ check_col(X,Y):- cell(X,Y,N) , X1 is X+1 , column_next(X1,Y,N) , shade(X,Y) ; tr
 
 
 % ---------- Corner techniques -------
+% Check the four corners
+corner_techniques():-
+	corner_up_left(),!,
+	corner_up_right(),!,
+	corner_down_left(),!,
+	corner_down_right(),!.
 
 
+corner_up_left():-
+	cell(1,1,N1),cell(1,2,N2),cell(2,1,N3),
+	N1=:=N2 , N2=:=N3 , shade(1,1)
+	;true,!.
+
+corner_up_right():-
+	size(Rows,Columns) , Y1 is Columns-1,
+	cell(1,Columns,M1),cell(1,Y1,M2),cell(2,Columns,M3),
+	M1=:=M2 , M2=:=M3 , shade(1,Columns)
+	;true,!.
+
+corner_down_left():-
+	size(Rows,Columns) , X1 is Rows-1,
+	cell(Rows,1,L1),cell(X1,1,L2),cell(Rows,2,L3),
+	L1=:=L2 , L2=:=L3 , shade(Rows,1)
+	;true,!.
+
+corner_down_right():-
+	size(Rows,Columns) , X1 is Rows-1 , Y1 is Columns-1,
+	cell(Rows,Columns,K1),cell(X1,Columns,K2),cell(Rows,Y1,K3),
+	K1=:=K2 , K2=:=K3 , shade(Rows,Columns)
+	;true,!.
+
+
+% ------------------------------------
 
 
 solve():-
@@ -299,8 +330,9 @@ solve():-
 	\+ search_pairs_rows([1,1]),
 	\+ search_pairs_columns([1,1]),
 	% Basic techniques:
-	\+ find_recurring_numbers([1,1]).
-
+	\+ find_recurring_numbers([1,1]),
+	% Corner techniques:
+	corner_techniques().
 
 main():-
 	init(),

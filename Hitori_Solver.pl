@@ -170,7 +170,7 @@ adjacent_row_at(X1,Y1):-
 	( N1 =:= N2 , N2 =:= N3 ->
 		shade(X1,Y1),
 		unshade(X1,Y2),
-		shade(X1,Y3), write(X1),write(Y1),write("->triple Founded[Row]"),nl,
+		shade(X1,Y3),% write(X1),write(Y1),write("->triple Founded[Row]"),nl,
 		Y4 is Y1+3,
 		adjacent_row_at(X1,Y4)
 		;
@@ -193,7 +193,7 @@ adjacent_column_at(X1,Y1):-
 	( N1 =:= N2 , N2 =:= N3 ->
 		shade(X1,Y1),
 		unshade(X2,Y1),
-		shade(X3,Y1), write(X1),write(Y1),write("->triple Founded[Column]"),nl,
+		shade(X3,Y1),% write(X1),write(Y1),write("->triple Founded[Column]"),nl,
 		X4 is X1+3,
 		adjacent_column_at(X4,Y1)
 		;
@@ -216,7 +216,7 @@ pair_row_at(X1,Y1):-
 	cell(X1,Y1,N1) , cell(X1,Y2,N2) , cell(X1,Y3,N3),
 	( N1 =:= N3 ->
 		unshade(X1,Y2),
-		write(X1),write(Y1),write("->pair Founded[Row]"),nl,
+		%write(X1),write(Y1),write("->pair Founded[Row]"),nl,
 		Y4 is Y1+3,
 		pair_row_at(X1,Y4)
 		;
@@ -238,7 +238,7 @@ pair_column_at(X1,Y1):-
 	cell(X1,Y1,N1) , cell(X2,Y1,N2) , cell(X3,Y1,N3),
 	( N1 =:= N3 ->
 		unshade(X2,Y1),
-		write(X1),write(Y1),write("->pair Founded[Column]"),nl,
+		%write(X1),write(Y1),write("->pair Founded[Column]"),nl,
 		X4 is X1+3,
 		pair_column_at(X4,Y1)
 		;
@@ -337,7 +337,7 @@ solve():-
 main():-
 	init(),
 	solve().
-	%solved().
+	solved().
 	
 init():-
 	retractall(black(_,_)),

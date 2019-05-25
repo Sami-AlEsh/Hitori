@@ -256,16 +256,50 @@ search_pairs_columns([X,Y]):-
 
 
 % ---------- Basic techniques --------
+
+
+% #1&2 Shading squares in rows and columns (Recurring Numbers) & Un-shading around shaded squares:
+% iterate on first column
+find_recurring_numbers([X,Y]):-
+	cell(X,Y,_) , \+ find_recurring_numbers_at_row(X,Y),
+
+	NX is X+1,
+	find_recurring_numbers([NX,Y]);
+	false,!.
+
+% iterate on first row
+find_recurring_numbers_at_row(X,Y):-
+	cell(X,Y,_),
+	check_recurring_number(X,Y),
+	NY is Y+1,
+	find_recurring_numbers_at_row(X,NY).
+
+% check if cell[X,Y] is repeated in it's row\column (in order to shade it)
+check_recurring_number(X,Y):-
+	not(black(X,Y)),
+	check_row(X,Y),!,
+	check_col(X,Y),!
+	;true,!.
+
+% check if cell[X,Y] is repeated in it's row
+check_row(X,Y):- cell(X,Y,N) , Y1 is Y+1 , row_next(X,Y1,N) , shade(X,Y) ; true,!.
+% check if cell[X,Y] is repeated in it's column
+check_col(X,Y):- cell(X,Y,N) , X1 is X+1 , column_next(X1,Y,N) , shade(X,Y) ; true,!.
+
+
 % ---------- Corner techniques -------
 
 
 
 
 solve():-
+	% Starting techniques:
 	\+ search_adjacent_triplets_rows([1,1]),
 	\+ search_adjacent_triplets_columns([1,1]),
 	\+ search_pairs_rows([1,1]),
-	\+ search_pairs_columns([1,1]).
+	\+ search_pairs_columns([1,1]),
+	% Basic techniques:
+	\+ find_recurring_numbers([1,1]).
 
 
 main():-

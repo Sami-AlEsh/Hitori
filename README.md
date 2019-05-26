@@ -31,6 +31,7 @@ The easiest way to begin a Hitori puzzle is to scan rows and columns using the s
 
 ##### 1. Searching for adjacent triplets:
 The middle square of an adjacent triplet must always be un-shaded. Let’s look at column d which has a triplet of adjacent 5s. The first rule of Hitori says the same number cannot appear more than once in a row or a column so we need to shade some of the 5s. If we shade all three we violate the second rule which says shaded squares must not touch each other vertically or horizontally. This violation will also occur if we shade just the two top 5s or the two bottom 5s. So the only possibility left is to shade the top and bottom 5s, and mark a circle around the middle 5 to indicate it must remain un-shaded.
+
 ![alt text](https://www.conceptispuzzles.com/picture/27/1221.gif)   ![alt text](https://www.conceptispuzzles.com/picture/27/1222.gif)
 
 ##### 2. Square between a pair:

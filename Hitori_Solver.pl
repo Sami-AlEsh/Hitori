@@ -343,14 +343,20 @@ ss():-findall([X,Y],black(X,Y),L) , write(L).
 
 solve():-
 	% Starting techniques:
-	\+ search_adjacent_triplets_rows([1,1]),
-	\+ search_adjacent_triplets_columns([1,1]),
+	triples(),
 	\+ search_pairs_rows([1,1]),
 	\+ search_pairs_columns([1,1]),
 	% Basic techniques:
 	%\+ find_recurring_numbers([1,1]),
 	% Corner techniques:
-	corner_techniques().
+	corner_techniques(),
+	% Advanced techniques:
+	backtrack(0).
+
+triples():-
+	\+ search_adjacent_triplets_rows([1,1]),
+	\+ search_adjacent_triplets_columns([1,1]).
+
 
 main():-
 	init(),

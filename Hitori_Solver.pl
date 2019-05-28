@@ -167,7 +167,25 @@ shade(X,Y):- black(X,Y),! ;
 unshade_around_shaded([]).
 unshade_around_shaded([X,Y]):- unshade(X,Y).
 
-unshade(X,Y):- circle(X,Y),! ; assert(circle(X,Y)),!.
+uncircle([]).
+uncircle([X,Y]):- retract(circle(X,Y)),!.
+
+unshade(X,Y):-
+	( black(X,Y),! ->
+	 retract(black(X,Y)),
+	 
+	 neighbors([X,Y],NB),
+	 first(NB,L1),
+	 uncircle(L1),
+	 second(NB,L2),
+	 uncircle(L2),
+	 third(NB,L3),
+	 uncircle(L3),
+	 forth(NB,L4),
+	 uncircle(L4)
+
+	; circle(X,Y)-> true,!
+	; is_white(X,Y) -> assert(circle(X,Y)),! ).
 
 % Check for adjacent triplets rows starting from[X1,Y1]:
 adjacent_row_at(X1,Y1):-
@@ -349,9 +367,9 @@ solve():-
 	% Basic techniques:
 	%\+ find_recurring_numbers([1,1]),
 	% Corner techniques:
-	corner_techniques(),
+	corner_techniques().
 	% Advanced techniques:
-	backtrack(0).
+	%backtrack(0).
 
 triples():-
 	\+ search_adjacent_triplets_rows([1,1]),

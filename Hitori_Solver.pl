@@ -152,7 +152,21 @@ solved():- grid_unique(),
 
 % #1 Searching for adjacent triplets:
 % Mark Cell as shaded(Black) or not shaded(Circle)
-shade(X,Y):- black(X,Y),! ; assert(black(X,Y)),!.
+shade(X,Y):- black(X,Y),! ;
+	neighbors([X,Y],NB),
+	first(NB,L1),
+	unshade_around_shaded(L1),
+	second(NB,L2),
+	unshade_around_shaded(L2),
+	third(NB,L3),
+	unshade_around_shaded(L3),
+	forth(NB,L4),
+	unshade_around_shaded(L4),
+	assert(black(X,Y)),!.
+
+unshade_around_shaded([]).
+unshade_around_shaded([X,Y]):- unshade(X,Y).
+
 unshade(X,Y):- circle(X,Y),! ; assert(circle(X,Y)),!.
 
 % Check for adjacent triplets rows starting from[X1,Y1]:

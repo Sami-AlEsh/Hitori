@@ -343,12 +343,12 @@ corner_down_right():-
 
 
 % ------------------------------------
-%backtrack(3):- grid_unique(),!.
+
 backtrack(16):- grid_unique(),!,white_continues(),!,black_dont_touch(),!.
 backtrack(CellNumber):-
 	CellNumber2 is CellNumber,
 	CellNumber2 =\= 16,
-	write(CellNumber),nl,
+	%write(CellNumber),nl,
 	white_continues(),black_dont_touch(),
 	TI is  CellNumber / 4,
 	I is floor(TI), II is I + 1,
@@ -358,7 +358,6 @@ backtrack(CellNumber):-
 	shade(II,JJ), ( not(backtrack(NCN)) -> retract(black(II,JJ)) , backtrack(NCN);true).
 
 
-ss():-findall([X,Y],black(X,Y),L) , write(L).
 % ------------------------------------
 
 
@@ -373,7 +372,7 @@ solve():-
 	% Corner techniques:
 	corner_techniques().
 	% Advanced techniques:
-	backtrack(0).
+	%backtrack(0).
 
 triples():-
 	\+ search_adjacent_triplets_rows([1,1]),
@@ -388,3 +387,18 @@ main():-
 init():-
 	retractall(black(_,_)),
 	retractall(circle(_,_)).
+
+
+printf([X,Y]):-
+	cell(X,Y,_) , \+ print_row_element(X,Y),
+	nl,
+	NX is X+1,
+	printf([NX,Y]);
+	false,!.
+
+print_row_element(X,Y):- 
+	cell(X,Y,_),
+	Y1 is Y+1,
+	cell(X,Y,N),
+	write(N),write(" "),
+	print_row_element(X,Y1).

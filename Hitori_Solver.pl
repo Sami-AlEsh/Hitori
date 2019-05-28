@@ -348,7 +348,7 @@ solve():-
 	\+ search_pairs_rows([1,1]),
 	\+ search_pairs_columns([1,1]),
 	% Basic techniques:
-	\+ find_recurring_numbers([1,1]),
+	%\+ find_recurring_numbers([1,1]),
 	% Corner techniques:
 	corner_techniques().
 

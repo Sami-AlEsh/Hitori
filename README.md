@@ -1,4 +1,5 @@
 # Hitori
+Hitori is a number-elimination puzzle based on a square grid filled with numbers. The object is to shade squares so that no number appears in a row or column more than once. In addition, shaded (black) squares do not touch each other vertically or horizontally and all un-shaded (white) squares create a single continuous area when the puzzle is completed.
 
 ### Hitori rules
 Following the footsteps of Sudoku and Kakuro, Hitori are yet another type of easy to learn addictive logic puzzle which was invented in Japan. Using pure logic and requiring no math to solve, these fascinating puzzles offer endless fun and intellectual entertainment to puzzle fans of all skills and ages.

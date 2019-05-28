@@ -313,6 +313,24 @@ corner_down_right():-
 
 
 % ------------------------------------
+%backtrack(3):- grid_unique(),!.
+backtrack(16):- grid_unique(),!,white_continues(),!,black_dont_touch(),!.
+backtrack(CellNumber):-
+	CellNumber2 is CellNumber,
+	CellNumber2 =\= 16,
+	write(CellNumber),nl,
+	white_continues(),black_dont_touch(),
+	TI is  CellNumber / 4,
+	I is floor(TI), II is I + 1,
+	J is CellNumber mod 4, JJ is J + 1,
+	NCN is CellNumber + 1,
+	%write(II),write(JJ),write(NCN),nl,
+	shade(II,JJ), ( not(backtrack(NCN)) -> retract(black(II,JJ)) , backtrack(NCN);true).
+
+
+ss():-findall([X,Y],black(X,Y),L) , write(L).
+% ------------------------------------
+
 
 
 solve():-

@@ -209,9 +209,6 @@ pair_row_at(X1,Y1):-
 	( N1 =:= N3 ->
 		unshade(X1,Y2),
 		%write(X1),write(Y1),write("->pair Founded[Row]"),nl,
-		Y4 is Y1+3,
-		pair_row_at(X1,Y4)
-		;
 		pair_row_at(X1,Y2)
 	).
 
@@ -231,9 +228,6 @@ pair_column_at(X1,Y1):-
 	( N1 =:= N3 ->
 		unshade(X2,Y1),
 		%write(X1),write(Y1),write("->pair Founded[Column]"),nl,
-		X4 is X1+3,
-		pair_column_at(X4,Y1)
-		;
 		pair_column_at(X2,Y1)
 	).
 

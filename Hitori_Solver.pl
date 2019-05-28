@@ -296,13 +296,17 @@ find_recurring_numbers_at_row(X,Y):-
 check_recurring_number(X,Y):-
 	not(black(X,Y)),
 	check_row(X,Y),!,
-	check_col(X,Y),!
+	check_row2(X,Y),!,
+	check_col(X,Y),!,
+	check_col2(X,Y),!
 	;true,!.
 
 % check if cell[X,Y] is repeated in it's row
-check_row(X,Y):- cell(X,Y,N) , Y1 is Y+1 , row_next(X,Y1,N) , shade(X,Y) ; true,!.
+check_row(X,Y):- cell(X,Y,N) , Y1 is Y+1 , row_next(X,Y1,N) , shade(X,Y) , (white_continues(),black_dont_touch() -> true,! ; unshade(X,Y)) ; true,!.
+check_row2(X,Y):- cell(X,Y,N) , Y1 is Y-1 , row_prev(X,Y1,N) , shade(X,Y) , (white_continues(),black_dont_touch() -> true,! ; unshade(X,Y)) ; true,!.
 % check if cell[X,Y] is repeated in it's column
-check_col(X,Y):- cell(X,Y,N) , X1 is X+1 , column_next(X1,Y,N) , shade(X,Y) ; true,!.
+check_col(X,Y):- cell(X,Y,N) , X1 is X+1 , column_next(X1,Y,N) , shade(X,Y) , (white_continues(),black_dont_touch() -> true,! ; unshade(X,Y)) ; true,!.
+check_col2(X,Y):- cell(X,Y,N) , X1 is X-1 , column_prev(X1,Y,N) , shade(X,Y) , (white_continues(),black_dont_touch() -> true,! ; unshade(X,Y)) ; true,!.
 
 
 % ---------- Corner techniques -------
@@ -365,11 +369,11 @@ solve():-
 	\+ search_pairs_rows([1,1]),
 	\+ search_pairs_columns([1,1]),
 	% Basic techniques:
-	%\+ find_recurring_numbers([1,1]),
+	\+ find_recurring_numbers([1,1]),
 	% Corner techniques:
 	corner_techniques().
 	% Advanced techniques:
-	%backtrack(0).
+	backtrack(0).
 
 triples():-
 	\+ search_adjacent_triplets_rows([1,1]),
